@@ -45,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       // Navigasi ke halaman lain setelah login berhasil
       // Misalnya: Navigator.pushReplacementNamed(context, '/home');
-      
+      widget.login();
     } catch (error) {
       setState(() {
         _isLoading = false;  // Set loading false jika terjadi error

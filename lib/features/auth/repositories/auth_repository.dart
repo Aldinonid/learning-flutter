@@ -19,7 +19,7 @@ class AuthRepository {
         print('Response Body: ${response.data}');
         return handler.next(response);
       },
-      onError: (DioError e, handler) {
+      onError: (DioException e, handler) {
         print('Error: ${e.message}');
         if (e.response != null) {
           print('Error Response: ${e.response?.statusCode} ${e.response?.data}');
@@ -33,7 +33,7 @@ class AuthRepository {
   Future<Map<String, dynamic>> login(String username, String password) async {
     try {
       final response = await _dio.post(
-        ApiConstants.baseUrl + ApiConstants.login,
+        '${ApiConstants.baseUrl}/c/dba6-9251-46f5-bb3f',
         data: {
           'username': username,
           'password': password,

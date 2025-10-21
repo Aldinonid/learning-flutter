@@ -46,6 +46,8 @@ class _NetworkLogPageState extends State<NetworkLogPage> {
           final log = logs[index];
           return ExpansionTile(
             title: Text('${log.method} ${log.url}'),
+            backgroundColor: log.statusCode == null && log.statusCode != 200 && log.statusCode != 201 ? Colors.redAccent : Colors.greenAccent,
+            collapsedBackgroundColor: log.statusCode == null && log.statusCode != 200 && log.statusCode != 201 ? Colors.redAccent : Colors.greenAccent,
             subtitle: Text(
               'Status: ${log.statusCode ?? '-'} | ${log.timestamp}',
               style: const TextStyle(fontSize: 12),
