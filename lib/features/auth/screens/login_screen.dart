@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_module_1/features/network/network_log.dart';
 import '../repositories/auth_repository.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -11,18 +12,18 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _emailController = TextEditingController();
+  final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final AuthRepository _authRepository = AuthRepository();
   bool _isLoading = false; 
 
   Future<void> _login() async {
-    final email = _emailController.text;
+    final username = _usernameController.text;
     final password = _passwordController.text;
 
-    if (email.isEmpty || password.isEmpty) {
-      // Menampilkan SnackBar jika email atau password kosong
-      _showSnackBar('Email dan password tidak boleh kosong');
+    if (username.isEmpty || password.isEmpty) {
+      // Menampilkan SnackBar jika username atau password kosong
+      _showSnackBar('Username dan password tidak boleh kosong', 'error');
       return;
     }
 
@@ -32,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       // Memanggil fungsi login dari AuthRepository
-      final result = await _authRepository.login(email, password);
+      await _authRepository.login(username, password);
       
       // Setelah login berhasil
       setState(() {
@@ -40,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
       });
       
       // Menampilkan SnackBar jika login berhasil
-      _showSnackBar('Login berhasil!');
+      _showSnackBar('Login berhasil!', 'success');
 
       // Navigasi ke halaman lain setelah login berhasil
       // Misalnya: Navigator.pushReplacementNamed(context, '/home');
@@ -50,16 +51,16 @@ class _LoginScreenState extends State<LoginScreen> {
         _isLoading = false;  // Set loading false jika terjadi error
       });
       // Menampilkan SnackBar jika terjadi error saat login
-      _showSnackBar('Login gagal: $error');
+      _showSnackBar('Login gagal: $error', 'error');
     }
   }
 
-  void _showSnackBar(String message) {
+  void _showSnackBar(String message, String status) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
         duration: Duration(seconds: 3),  // Durasi muncul SnackBar
-        backgroundColor: Colors.red,  // Warna background (bisa disesuaikan)
+        backgroundColor: status == 'success' ? Colors.blue : Colors.red,  // Warna background (bisa disesuaikan)
       ),
     );
   }
@@ -74,9 +75,9 @@ class _LoginScreenState extends State<LoginScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextFormField(
-              controller: _emailController,
-              decoration: InputDecoration(labelText: "Email"),
-              keyboardType: TextInputType.emailAddress,
+              controller: _usernameController,
+              decoration: InputDecoration(labelText: "Username"),
+              keyboardType: TextInputType.name,
             ),
             SizedBox(height: 10),
             TextFormField(
@@ -91,6 +92,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: _login,
                     child: Text('Login'),
                   ),
+            FloatingActionButton(
+              child: const Icon(Icons.bug_report),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const NetworkLogPage()),
+                );
+              },
+            )
           ],
         ),
       ),

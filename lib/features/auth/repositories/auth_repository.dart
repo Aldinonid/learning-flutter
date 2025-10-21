@@ -1,9 +1,9 @@
-import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter_module_1/core/constants/api_constants.dart';
+import 'package:flutter_module_1/core/network/network_logger.dart';
 
 class AuthRepository {
-  final Dio _dio = Dio();  // Inisialisasi Dio
+  final Dio _dio = Dio()..interceptors.add(NetworkLoggerInterceptor());  // Inisialisasi Dio
 
   AuthRepository() {
     // Tambahkan interceptor untuk log request dan response
@@ -30,12 +30,12 @@ class AuthRepository {
   }
 
   // Fungsi login
-  Future<Map<String, dynamic>> login(String email, String password) async {
+  Future<Map<String, dynamic>> login(String username, String password) async {
     try {
       final response = await _dio.post(
         ApiConstants.baseUrl + ApiConstants.login,
         data: {
-          'email': email,
+          'username': username,
           'password': password,
         },
         options: Options(
@@ -47,7 +47,7 @@ class AuthRepository {
       return response.data;
     } catch (e) {
       // Tangani error jika terjadi
-      if (e is DioError) {
+      if (e is DioException) {
         throw Exception('Gagal login: ${e.response?.data ?? e.message}');
       }
       rethrow;  // Rethrow error jika bukan DioError

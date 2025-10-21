@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_module_1/features/network/network_log.dart';
 
 class HomeScreen extends StatelessWidget {
   final Function logout;  // Fungsi logout yang diteruskan dari AuthWrapper
@@ -26,6 +27,15 @@ class HomeScreen extends StatelessWidget {
                 },
                 child: Text("Logout"),
               ),
+              FloatingActionButton(
+                child: const Icon(Icons.bug_report),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const NetworkLogPage()),
+                  );
+                },
+              )
             ],
           ),
         ),
