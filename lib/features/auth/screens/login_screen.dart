@@ -3,7 +3,7 @@ import 'package:flutter_module_1/features/network/network_log.dart';
 import '../repositories/auth_repository.dart';
 
 class LoginScreen extends StatefulWidget {
-  final Function login;  // Fungsi login yang akan dipanggil ketika login berhasil
+  final void Function(String name, String profPic) login; 
 
   const LoginScreen({super.key, required this.login});
 
@@ -33,19 +33,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       // Memanggil fungsi login dari AuthRepository
-      await _authRepository.login(username, password);
+      final result = await _authRepository.login(username, password);
       
       // Setelah login berhasil
       setState(() {
         _isLoading = false;  // Set loading false ketika proses selesai
       });
-      
-      // Menampilkan SnackBar jika login berhasil
       _showSnackBar('Login berhasil!', 'success');
-
-      // Navigasi ke halaman lain setelah login berhasil
-      // Misalnya: Navigator.pushReplacementNamed(context, '/home');
-      widget.login();
+      widget.login(result.nama, result.profPic);
     } catch (error) {
       setState(() {
         _isLoading = false;  // Set loading false jika terjadi error

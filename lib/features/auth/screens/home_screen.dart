@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_module_1/features/network/network_log.dart';
 
 class HomeScreen extends StatelessWidget {
-  final Function logout;  // Fungsi logout yang diteruskan dari AuthWrapper
+  final Function logout; 
+  final String name;
+  final String profPic;
 
-  HomeScreen({required this.logout});
+  HomeScreen({required this.logout, required this.name, required this.profPic});
 
   @override
   Widget build(BuildContext context) {
@@ -17,8 +19,16 @@ class HomeScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Welcome to the Home Page!',  // Pesan sambutan
+                'Welcome, $name!',
+                textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 24),
+              ),
+              Image.network(
+                profPic,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return const Center(child: CircularProgressIndicator());
+                },
               ),
               SizedBox(height: 20),
               ElevatedButton(

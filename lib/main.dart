@@ -31,19 +31,25 @@ class AuthWrapper extends StatefulWidget {
 }
 
 class _AuthWrapperState extends State<AuthWrapper> {
-  bool isAuthenticated = false;  // Status login, default belum login
+  bool isAuthenticated = false;  
+  String? name;
+  String? profPic;
 
   // Fungsi untuk melakukan login
-  void login() {
+  void login(String name, String profPic) {
     setState(() {
-      isAuthenticated = true;  // Mengubah status jadi terautentikasi
+      isAuthenticated = true;
+      this.name = name;
+      this.profPic = profPic;
     });
   }
 
   // Fungsi untuk melakukan logout
   void logout() {
     setState(() {
-      isAuthenticated = false;  // Mengubah status jadi belum terautentikasi
+      isAuthenticated = false;
+      name = null;
+      profPic = null;
     });
   }
 
@@ -51,9 +57,13 @@ class _AuthWrapperState extends State<AuthWrapper> {
   Widget build(BuildContext context) {
     // Mengecek status login dan menampilkan layar yang sesuai
     if (isAuthenticated) {
-      return HomeScreen(logout: logout);  // Jika sudah login, arahkan ke HomeScreen
+      return HomeScreen(
+        logout: logout, 
+        name: name ?? "", 
+        profPic: profPic ?? ""
+      );
     } else {
-      return LoginScreen(login: login);  // Jika belum login, tampilkan LoginScreen
+      return LoginScreen(login: login);
     }
   }
 }
