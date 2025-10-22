@@ -19,7 +19,7 @@ class NetworkManager {
         print('Response Body: ${response.data}');
         return handler.next(response);  // Melanjutkan response
       },
-      onError: (DioError e, handler) {
+      onError: (DioException e, handler) {
         print('Error: ${e.message}');
         if (e.response != null) {
           print('Error Response: ${e.response?.statusCode} ${e.response?.data}');

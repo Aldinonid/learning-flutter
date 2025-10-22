@@ -49,19 +49,19 @@ class _NetworkLogPageState extends State<NetworkLogPage> {
             backgroundColor: log.statusCode == null && log.statusCode != 200 && log.statusCode != 201 ? Colors.redAccent : Colors.greenAccent,
             collapsedBackgroundColor: log.statusCode == null && log.statusCode != 200 && log.statusCode != 201 ? Colors.redAccent : Colors.greenAccent,
             subtitle: Text(
-              'Status: ${log.statusCode ?? '-'} | ${log.timestamp}',
+              'Status: ${log.statusCode ?? '-'} | ${log.responseTime}',
               style: const TextStyle(fontSize: 12),
             ),
             children: [
-              if (log.requestBody != null)
+              if (log.requestData != null)
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text('Request:\n${log.requestBody}'),
+                  child: Text('Request:\n${log.requestData}'),
                 ),
-              if (log.responseBody != null)
+              if (log.responseData != null)
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text('Response:\n${log.responseBody}'),
+                  child: Text('Response:\n${log.responseData}'),
                 ),
             ],
           );

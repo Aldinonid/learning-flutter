@@ -2,21 +2,27 @@ import 'dart:ui';
 import 'package:dio/dio.dart';
 
 class NetworkLog {
-  final String method;
+  final String id;
   final String url;
-  final int? statusCode;
-  final String? requestBody;
-  final String? responseBody;
-  final DateTime timestamp;
+  final String method;
+  final dynamic requestData;
+  dynamic responseData;
+  int? statusCode;
+  DateTime requestTime;
+  DateTime? responseTime;
 
   NetworkLog({
-    required this.method,
+    required this.id,
     required this.url,
+    required this.method,
+    required this.requestData,
+    required this.requestTime,
+    this.responseData,
     this.statusCode,
-    this.requestBody,
-    this.responseBody,
-  }) : timestamp = DateTime.now();
+    this.responseTime,
+  });
 }
+
 
 class NetworkLogger {
   static final NetworkLogger _instance = NetworkLogger._internal();
@@ -44,33 +50,62 @@ class NetworkLogger {
 class NetworkLoggerInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    NetworkLogger().addLog(NetworkLog(
-      method: options.method,
+    final id = DateTime.now().microsecondsSinceEpoch.toString();
+
+    options.extra['log_id'] = id;
+
+    final log = NetworkLog(
+      id: id,
       url: options.uri.toString(),
-      requestBody: options.data?.toString(),
-    ));
-    handler.next(options);
+      method: options.method,
+      requestData: options.data,
+      requestTime: DateTime.now(),
+    );
+
+    NetworkLogger().addLog(log);
+
+    super.onRequest(options, handler);
   }
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    NetworkLogger().addLog(NetworkLog(
-      method: response.requestOptions.method,
-      url: response.requestOptions.uri.toString(),
-      statusCode: response.statusCode,
-      responseBody: response.data.toString(),
-    ));
-    handler.next(response);
+    final logId = response.requestOptions.extra['log_id'];
+    final logs = NetworkLogger().logs;
+
+    NetworkLog? log;
+    try {
+      log = logs.firstWhere((l) => l.id == logId);
+    } catch (_) {
+      log = null;
+    }
+
+    if (log != null) {
+      log.responseData = response.data;
+      log.statusCode = response.statusCode;
+      log.responseTime = DateTime.now();
+    }
+
+    super.onResponse(response, handler);
   }
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    NetworkLogger().addLog(NetworkLog(
-      method: err.requestOptions.method,
-      url: err.requestOptions.uri.toString(),
-      statusCode: err.response?.statusCode,
-      responseBody: err.response?.data?.toString(),
-    ));
-    handler.next(err);
+    final logId = err.requestOptions.extra['log_id'];
+    final logs = NetworkLogger().logs;
+
+    NetworkLog? log;
+    try {
+      log = logs.firstWhere((l) => l.id == logId);
+    } catch (_) {
+      log = null;
+    }
+
+    if (log != null) {
+      log.responseData = err.message;
+      log.statusCode = err.response?.statusCode;
+      log.responseTime = DateTime.now();
+    }
+
+    super.onError(err, handler);
   }
 }
