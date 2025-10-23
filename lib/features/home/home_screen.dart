@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_module_1/features/network/network_log.dart';
+import 'package:flutter_module_1/features/logs/network_log.dart';
 
 class HomeScreen extends StatelessWidget {
   final Function logout; 
   final String name;
   final String profPic;
 
-  HomeScreen({required this.logout, required this.name, required this.profPic});
+  const HomeScreen({super.key, required this.logout, required this.name, required this.profPic});
 
   @override
   Widget build(BuildContext context) {

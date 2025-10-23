@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'dart:developer' as developer;
 
 class Page3 extends StatelessWidget {
   const Page3({super.key});
@@ -89,13 +90,13 @@ class WidgetLatihan extends StatelessWidget {
             const TextSection(title: '7. GestureDetector', content: 'Untuk menangani gesture seperti tap.'),
             GestureDetector(
               onTap: () {
-                print('Tapped!');
+                developer.log('Tapped!');
               },
               onDoubleTap: () {
-                print('Double tapped!');
+                developer.log('Double tapped!');
               },
               onLongPress: () {
-                print('long pressed!');
+                developer.log('long pressed!');
               },
               child: Container(color: Colors.green, width: 100, height: 100),
             ),

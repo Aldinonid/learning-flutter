@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_module_1/features/network/network_log.dart';
+import 'package:flutter_module_1/features/logs/network_log.dart';
 import '../repositories/auth_repository.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -8,7 +8,7 @@ class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key, required this.login});
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
