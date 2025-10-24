@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_module_1/features/auth/screens/register_screen.dart';
 import 'package:flutter_module_1/features/logs/network_log.dart';
 import '../repositories/auth_repository.dart';
 
@@ -50,6 +51,10 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  void _register() {
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const RegisterScreen()));
+  }
+
   void _showSnackBar(String message, String status) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -80,24 +85,43 @@ class _LoginScreenState extends State<LoginScreen> {
               decoration: InputDecoration(labelText: "Password"),
               obscureText: true,  // Menyembunyikan password yang dimasukkan
             ),
-            SizedBox(height: 20),
-            _isLoading
-                ? CircularProgressIndicator()  // Menampilkan loading saat proses login
-                : ElevatedButton(
-                    onPressed: _login,
-                    child: Text('Login'),
+            const SizedBox(height: 20),
+            if (_isLoading) ...[
+              Center(child: CircularProgressIndicator()),
+            ] else ...[
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                        onPressed: _login,
+                        child: Text('Login'),
+                      )
                   ),
-            FloatingActionButton(
-              child: const Icon(Icons.bug_report),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const NetworkLogPage()),
-                );
-              },
-            )
+                  const SizedBox(width: 16), // spasi antar tombol
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.deepPurpleAccent,
+                        foregroundColor: Colors.white,
+                      ),
+                      onPressed: _register,
+                      child: Text('Register'),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.bug_report),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const NetworkLogPage()),
+          );
+        },
       ),
     );
   }
